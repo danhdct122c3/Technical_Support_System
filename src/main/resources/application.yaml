@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: technical-support-backend
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# ===== AWS / DynamoDB =====
+aws:
+  region: ap-southeast-1
+  dynamodb:
+    endpoint: ""           # Leave empty for AWS; set "http://localhost:8000" for DynamoDB Local
+    table-prefix: tbs-     # Table names: tbs-tickets, tbs-users, tbs-comments, tbs-audit-logs
+
+# ===== Ticket SLA Configuration =====
+ticket:
+  sla:
+    critical-hours: 4
+    high-hours: 24
+    medium-hours: 72
+    low-hours: 168
+  alert:
+    enabled: true
+    overdue-check-cron: "0 */15 * * * *"   # Check overdue every 15 minutes
+
+# ===== Actuator / Metrics =====
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+# ===== OpenAPI / Swagger =====
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+# ===== Logging =====
+logging:
+  level:
+    com.awsfcaj: DEBUG
+    software.amazon.awssdk: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# ===== App Info =====
+info:
+  app:
+    name: Technical Support Backend
+    version: 0.0.1-SNAPSHOT
+    description: Internal IT/Facility Support Ticket System
